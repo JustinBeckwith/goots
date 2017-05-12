@@ -7,7 +7,7 @@ Goots is Google's default TypeScript configuration. Made with ❤️ by the Goog
 - All tests go in `test`
 
 # Tasks
-Run `gulp run <task>` to try the follow pre-built tasks.
+Run `goots <task>` to try the following pre-built tasks.
 
 - `clean` - deletes the compiled output directory
 - `compile` - runs the TypeScript compiler
