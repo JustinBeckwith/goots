@@ -1,0 +1,23 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "goots clean",
+    "compile": "goots compile",
+    "format": "goots format",
+    "test": "goots test",
+    "test.check-format": "goots test.check-format",
+    "test.check-lint": "goots test.check-lint",
+    "test.compile": "goots test.compile",
+    "test.unit": "goots test.unit",
+    "watch": "goots watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^7.0.18"
+  }
+}
