@@ -19,5 +19,4 @@
 const gulp = require('gulp');
 require('../gulpfile');
 const args = process.argv.slice(2);
-const task = args.length > 0 ? args[0] : "default";
 gulp.start.apply(gulp, args);
