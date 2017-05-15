@@ -1,0 +1,28 @@
+{
+  "name": "goots",
+  "version": "1.0.0",
+  "types": "build/definitions/index.d.ts",
+  "license": "Apache-2.0",
+  "bin": {
+    "goots": "bin/goots.js"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.8",
+    "ava": "^0.18.2",
+    "clang-format": "^1.0.48",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-ava": "^0.16.0",
+    "gulp-clang-format": "^1.0.23",
+    "gulp-sourcemaps": "^2.4.1",
+    "gulp-tslint": "^7.1.0",
+    "gulp-typescript": "^3.1.6",
+    "merge2": "^1.0.3",
+    "source-map-support": "^0.4.14",
+    "tslint": "^4.5.1",
+    "typescript": "^2.2.1"
+  },
+  "dependencies": {
+    "yargs": "^8.0.1"
+  }
+}
