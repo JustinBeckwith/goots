@@ -18,6 +18,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^7.0.18"
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^7.0.18",
+    "gulp-mocha": "^4.3.1",
+    "mocha": "^3.4.1"
   }
 }

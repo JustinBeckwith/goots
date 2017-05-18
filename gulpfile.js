@@ -28,11 +28,17 @@ const tslint = require('gulp-tslint');
 const path = require('path');
 const process = require('process');
 
-const tsconfigPath = path.join(__dirname, 'tsconfig.json');
-const outDir = rebase('build');
 const sources = [rebase('src/**/*.ts')];
 const tests = [rebase('test/**/*.ts')];
-const allFiles = [rebase('*.js')].concat(sources, tests);
+
+const gootsConfig = gulp.gootsConfig = {
+  tsconfigPath: path.join(__dirname, 'tsconfig.json'),
+  tslintPath: path.join(__dirname, 'tslint.json'),
+  outDir: rebase('build'),
+  sources: sources,
+  tests: tests,
+  allFiles: [rebase('*.js')].concat(sources, tests)
+};
 
 function rebase(glob) {
   let rootDir;
@@ -52,62 +58,68 @@ function onError() {
 }
 
 gulp.task('test.check-format', () => {
-  return gulp.src(allFiles)
+  return gulp.src(gootsConfig.allFiles)
       .pipe(format.checkFormat('file', clangFormat))
       .on('warning', onError);
 });
 
 gulp.task('format', () => {
-  return gulp.src(allFiles, {base: '.'})
+  return gulp.src(gootsConfig.allFiles, {base: '.'})
       .pipe(format.format('file', clangFormat))
       .pipe(gulp.dest('.'));
 });
 
 gulp.task('test.check-lint', () => {
-  return gulp.src(allFiles)
-      .pipe(tslint({formatter: 'verbose'}))
+  return gulp.src(gootsConfig.allFiles)
+      .pipe(tslint({
+        configuration: gootsConfig.tslintPath,
+        formatter: 'verbose'
+      }))
       .pipe(tslint.report())
       .on('warning', onError);
 });
 
 gulp.task('clean', () => {
-  return del([`${outDir}`]);
+  return del([`${gootsConfig.outDir}`]);
 });
 
 gulp.task('compile', () => {
-  const tsResult = gulp.src(sources)
+  const tsResult = gulp.src(gootsConfig.sources)
                        .pipe(sourcemaps.init())
-                       .pipe(ts.createProject(tsconfigPath)())
+                       .pipe(ts.createProject(gootsConfig.tsconfigPath)())
                        .on('error', onError);
   return merge([
-    tsResult.dts.pipe(gulp.dest(`${outDir}/definitions`)),
+    tsResult.dts.pipe(gulp.dest(`${gootsConfig.outDir}/definitions`)),
     tsResult.js
         .pipe(sourcemaps.write(
             '.', {includeContent: false, sourceRoot: '../../src'}))
-        .pipe(gulp.dest(`${outDir}/src`)),
-    tsResult.js.pipe(gulp.dest(`${outDir}/src`))
+        .pipe(gulp.dest(`${gootsConfig.outDir}/src`)),
+    tsResult.js.pipe(gulp.dest(`${gootsConfig.outDir}/src`))
   ]);
 });
 
 gulp.task('test.compile', ['compile'], () => {
-  return gulp.src(tests, {base: '.'})
+  return gulp.src(gootsConfig.tests, {base: '.'})
       .pipe(sourcemaps.init())
-      .pipe(ts.createProject(tsconfigPath)())
+      .pipe(ts.createProject(gootsConfig.tsconfigPath)())
       .on('error', onError)
       .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: '../..'}))
-      .pipe(gulp.dest(`${outDir}/`));
+      .pipe(gulp.dest(`${gootsConfig.outDir}/`));
 });
 
 gulp.task('test.unit', ['test.compile'], () => {
-  return gulp.src([`${outDir}/test/**/*.js`]).pipe(ava({verbose: true}));
+  return gulp.src([`${gootsConfig.outDir}/test/**/*.js`])
+      .pipe(ava({verbose: true}));
 });
 
 gulp.task('watch', () => {
   exitOnError = false;
   gulp.start(['test.compile']);
   // TODO: also run unit tests in a non-fatal way
-  return gulp.watch(allFiles, ['test.compile']);
+  return gulp.watch(gootsConfig.allFiles, ['test.compile']);
 });
 
 gulp.task('test', ['test.unit', 'test.check-format', 'test.check-lint']);
 gulp.task('default', ['compile']);
+
+module.exports = gulp;
