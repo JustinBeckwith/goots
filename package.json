@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "types": "build/definitions/index.d.ts",
   "license": "Apache-2.0",
+  "main": "index.js",
   "bin": {
     "goots": "bin/goots.js"
   },
-  "devDependencies": {
+  "dependencies": {
     "@types/node": "^7.0.8",
     "ava": "^0.18.2",
     "clang-format": "^1.0.48",
@@ -21,8 +22,5 @@
     "source-map-support": "^0.4.14",
     "tslint": "^4.5.1",
     "typescript": "^2.2.1"
-  },
-  "dependencies": {
-    "yargs": "^8.0.1"
   }
 }

@@ -5,7 +5,7 @@ Goots is Google's default TypeScript configuration. Made with ❤️ by the Goog
 - All sources are written in TypeScript
 - All sources go in `src`
 - All tests go in `test`
-- `require('goots/gulpfile)` in your gulpfile.js to inherit the default gulp tasks.
+- `const gulp = require('goots').gulpfile(require('gulp'))` in your gulpfile.js to inherit the default gulp tasks.
 
 # Tasks
 Run `gulp <task>` to try the following pre-built tasks.

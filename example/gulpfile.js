@@ -1,7 +1,7 @@
 'use strict';
 
 // inherit from goots/gulpfile
-const gulp = require('goots/gulpfile.js');
+const gulp = require('..').gulpfile(require('gulp'));
 const gootsConfig = gulp.gootsConfig;
 const mocha = require('gulp-mocha');
 
