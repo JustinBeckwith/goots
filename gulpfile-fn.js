@@ -50,13 +50,14 @@ module.exports = function(gulp, options) {
     }
   }
 
-  function rebase(glob) { 
+  function rebase(glob) {
     return path.join(path.resolve(rootDir, glob));
   }
 
   const sources = [rebase('src/**/*.ts')];
   const tests = [rebase('test/**/*.ts')];
   const gootsConfig = gulp.gootsConfig = {
+    rootDir: rootDir,
     tsconfigPath: path.join(__dirname, 'tsconfig.json'),
     tslintPath: path.join(__dirname, 'tslint.json'),
     outDir: rebase('build'),
@@ -86,10 +87,8 @@ module.exports = function(gulp, options) {
 
   gulp.task('test.check-lint', () => {
     return gulp.src(gootsConfig.allFiles)
-        .pipe(tslint({
-          configuration: gootsConfig.tslintPath,
-          formatter: 'verbose'
-        }))
+        .pipe(tslint(
+            {configuration: gootsConfig.tslintPath, formatter: 'verbose'}))
         .pipe(tslint.report())
         .on('warning', onError);
   });
@@ -100,9 +99,9 @@ module.exports = function(gulp, options) {
 
   gulp.task('compile', () => {
     const tsResult = gulp.src(gootsConfig.sources)
-                        .pipe(sourcemaps.init())
-                        .pipe(ts.createProject(gootsConfig.tsconfigPath)())
-                        .on('error', onError);
+                         .pipe(sourcemaps.init())
+                         .pipe(ts.createProject(gootsConfig.tsconfigPath)())
+                         .on('error', onError);
     return merge([
       tsResult.dts.pipe(gulp.dest(`${gootsConfig.outDir}/definitions`)),
       tsResult.js
@@ -118,13 +117,15 @@ module.exports = function(gulp, options) {
         .pipe(sourcemaps.init())
         .pipe(ts.createProject(gootsConfig.tsconfigPath)())
         .on('error', onError)
-        .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: '../..'}))
+        .pipe(
+            sourcemaps.write('.', {includeContent: false, sourceRoot: '../..'}))
         .pipe(gulp.dest(`${gootsConfig.outDir}/`));
   });
 
   gulp.task('test.unit', ['test.compile'], () => {
-    return gulp.src([`${gootsConfig.outDir}/test/**/*.js`])
-        .pipe(ava({verbose: true}));
+    return gulp.src([`${gootsConfig.outDir}/test/**/*.js`]).pipe(ava({
+      verbose: true
+    }));
   });
 
   gulp.task('watch', () => {
