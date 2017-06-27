@@ -54,8 +54,8 @@ module.exports = function(gulp, options) {
     return path.join(path.resolve(rootDir, glob));
   }
 
-  const sources = [rebase('src/**/*.ts')];
-  const tests = [rebase('test/**/*.ts')];
+  const sources = [rebase('src/**/*.ts'), '!**/node_modules/**/*'];
+  const tests = [rebase('test/**/*.ts'), '!**/node_modules/**/*'];
   const gootsConfig = gulp.gootsConfig = {
     rootDir: rootDir,
     tsconfigPath: path.join(__dirname, 'tsconfig.json'),
