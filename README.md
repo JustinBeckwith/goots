@@ -1,4 +1,6 @@
 # Goots
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/JustinBeckwith/goots.svg)](https://greenkeeper.io/)
 Goots is Google's default TypeScript configuration. Made with ❤️ by the Google Node.js team.
 
 # How this works
